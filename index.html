@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Julxyzuu Downloader - All-in-One Video Downloader</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #ff7eb9;
@@ -11,52 +15,120 @@
             --dark: #1a1a2e;
             --light: #f8f8ff;
             --accent: #5ce1e6;
+            --comic-blue: #3b4cca;
+            --comic-red: #ff0000;
+            --comic-white: #ffffff;
         }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
         }
+        
         body {
+            font-family: 'Poppins', sans-serif;
             background-color: var(--dark);
             color: var(--light);
             background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ff7eb9' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
         }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
+        
         header {
             text-align: center;
             padding: 20px 0;
             margin-bottom: 30px;
+            animation: bounceIn 1s ease;
         }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            60% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
         .logo {
-            font-size: 2.5rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8rem;
             font-weight: 800;
-            color: var(--primary);
-            text-shadow: 0 0 10px rgba(255, 126, 185, 0.5);
+            color: var(--comic-red);
+            text-shadow: 3px 3px 0px var(--comic-blue), 
+                         -2px -2px 0px var(--comic-white);
             margin-bottom: 10px;
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
         }
+        
+        .logo::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--comic-blue), var(--comic-red), var(--comic-white));
+            border-radius: 10px;
+        }
+        
         .tagline {
+            font-family: 'Poppins', sans-serif;
             color: var(--accent);
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            font-weight: 500;
         }
+        
         .main {
             background: rgba(26, 26, 46, 0.8);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--primary);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 
+                        0 0 15px var(--comic-blue),
+                        0 0 10px var(--comic-red);
+            border: 3px solid var(--comic-blue);
+            animation: fadeInUp 0.8s ease;
+            position: relative;
+            overflow: hidden;
         }
+        
+        .main::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 2px dashed var(--comic-red);
+            border-radius: 25px;
+            pointer-events: none;
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes fadeInUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
         .input-group {
             display: flex;
             margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
         }
+        
         .url-input {
             flex: 1;
             padding: 15px 20px;
@@ -66,98 +138,161 @@
             color: var(--light);
             font-size: 1rem;
             outline: none;
+            border: 2px solid var(--comic-blue);
+            border-right: none;
+            font-family: 'Poppins', sans-serif;
         }
+        
         .url-input::placeholder {
             color: rgba(255, 255, 255, 0.5);
+            font-family: 'Poppins', sans-serif;
         }
+        
         .platform-select {
             padding: 0 15px;
             border: none;
             background: rgba(122, 119, 255, 0.3);
             color: var(--light);
+            border: 2px solid var(--comic-blue);
             border-left: 1px solid rgba(255, 255, 255, 0.1);
             border-right: 1px solid rgba(255, 255, 255, 0.1);
             outline: none;
             cursor: pointer;
+            font-family: 'Poppins', sans-serif;
         }
+        
         .download-btn {
             padding: 0 25px;
             border: none;
             border-radius: 0 10px 10px 0;
-            background: var(--primary);
-            color: var(--dark);
+            background: var(--comic-red);
+            color: var(--comic-white);
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            border: 2px solid var(--comic-blue);
+            border-left: none;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
         }
+        
+        .download-btn::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .download-btn:hover::after {
+            left: 100%;
+        }
+        
         .download-btn:hover {
-            background: var(--secondary);
+            background: var(--comic-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
         }
+        
         .format-options {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
+        
         .format-btn {
             padding: 8px 15px;
-            border: 1px solid var(--primary);
+            border: 2px solid var(--comic-blue);
             border-radius: 20px;
             background: transparent;
             color: var(--primary);
             cursor: pointer;
             transition: all 0.3s ease;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
         }
+        
         .format-btn.active {
-            background: var(--primary);
-            color: var(--dark);
+            background: var(--comic-blue);
+            color: var(--comic-white);
+            transform: scale(1.05);
         }
+        
         .format-btn:hover {
-            background: var(--primary);
-            color: var(--dark);
+            background: var(--comic-red);
+            color: var(--comic-white);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(255, 0, 0, 0.3);
         }
+        
         .result-container {
             display: none;
             margin-top: 30px;
             animation: fadeIn 0.5s ease;
         }
+        
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+        
         .video-info {
             display: flex;
             gap: 20px;
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
+        
         .thumbnail {
             width: 300px;
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 3px solid var(--comic-blue);
+            animation: pulse 2s infinite;
         }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0px rgba(59, 76, 202, 0.7); }
+            100% { box-shadow: 0 0 0 10px rgba(59, 76, 202, 0); }
+        }
+        
         .thumbnail img {
             width: 100%;
             height: auto;
             display: block;
         }
+        
         .details {
             flex: 1;
             min-width: 300px;
         }
+        
         .title {
+            font-family: 'Montserrat', sans-serif;
             font-size: 1.5rem;
             margin-bottom: 10px;
             color: var(--accent);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
+        
         .metadata {
             margin-bottom: 15px;
             color: rgba(255, 255, 255, 0.7);
+            font-family: 'Poppins', sans-serif;
         }
+        
         .download-options {
             margin-top: 20px;
         }
+        
         .download-option {
             display: flex;
             justify-content: space-between;
@@ -166,23 +301,40 @@
             background: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
             margin-bottom: 10px;
+            border-left: 4px solid var(--comic-red);
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
         }
+        
+        .download-option:hover {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
         .download-link {
             padding: 8px 15px;
-            background: var(--secondary);
+            background: var(--comic-blue);
             color: var(--light);
             text-decoration: none;
             border-radius: 5px;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-family: 'Poppins', sans-serif;
         }
+        
         .download-link:hover {
-            background: var(--primary);
+            background: var(--comic-red);
+            transform: scale(1.05);
         }
+        
         .loading {
             display: none;
             text-align: center;
             padding: 30px 0;
         }
+        
         .spinner {
             width: 50px;
             height: 50px;
@@ -192,9 +344,11 @@
             animation: spin 1s ease-in-out infinite;
             margin: 0 auto 20px;
         }
+        
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        
         .error-message {
             display: none;
             padding: 15px;
@@ -202,64 +356,123 @@
             border-left: 4px solid #ff5252;
             margin: 20px 0;
             border-radius: 4px;
+            animation: shake 0.5s ease;
+            font-family: 'Poppins', sans-serif;
         }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        
         .supported-platforms {
             margin-top: 40px;
         }
+        
         .platforms-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 15px;
             margin-top: 15px;
         }
+        
         .platform-item {
             background: rgba(255, 255, 255, 0.05);
             padding: 15px;
             border-radius: 10px;
             text-align: center;
             transition: all 0.3s ease;
+            border: 2px solid transparent;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-weight: 600;
-            color: var(--primary);
+            gap: 8px;
+            font-family: 'Poppins', sans-serif;
         }
+        
         .platform-item:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px) scale(1.05);
             background: rgba(255, 255, 255, 0.1);
+            border-color: var(--comic-red);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
         }
+        
         .platform-icon {
-            width: 24px;
-            height: 24px;
-            fill: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 5px;
         }
+        
+        .youtube { color: #FF0000; }
+        .facebook { color: #1877F2; }
+        .instagram { color: #E4405F; }
+        .tiktok { color: #000000; }
+        .twitter { color: #1DA1F2; }
+        .soundcloud { color: #FF3300; }
+        .linkedin { color: #0A66C2; }
+        .other { color: var(--accent); }
+        
         footer {
             text-align: center;
             margin-top: 50px;
             padding: 20px;
             color: rgba(255, 255, 255, 0.5);
             font-size: 0.9rem;
+            border-top: 2px dashed var(--comic-blue);
+            animation: fadeIn 1s ease;
+            font-family: 'Poppins', sans-serif;
         }
+        
+        .floating-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--comic-red);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            animation: float 3s ease-in-out infinite;
+            z-index: 100;
+            cursor: pointer;
+            border: 2px solid var(--comic-white);
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
         @media (max-width: 768px) {
             .input-group {
                 flex-direction: column;
             }
+            
             .url-input, .platform-select, .download-btn {
                 width: 100%;
                 border-radius: 10px;
                 margin-bottom: 10px;
+                border: 2px solid var(--comic-blue);
             }
+            
             .video-info {
                 flex-direction: column;
             }
+            
             .thumbnail {
                 width: 100%;
             }
+            
+            .logo {
+                font-size: 2rem;
+            }
         }
     </style>
-    <!-- FontAwesome CDN for social media icons -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="container">
@@ -270,7 +483,7 @@
         
         <main class="main">
             <div class="input-group">
-                <input type="text" class="url-input" placeholder="Masukkan URL video atau kata kunci..." id="urlInput" />
+                <input type="text" class="url-input" placeholder="Masukkan URL video atau kata kunci..." id="urlInput">
                 <select class="platform-select" id="platformSelect">
                     <option value="auto">Auto Detect</option>
                     <option value="youtube">YouTube</option>
@@ -281,14 +494,14 @@
                     <option value="soundcloud">SoundCloud</option>
                     <option value="linkedin">LinkedIn</option>
                 </select>
-                <button class="download-btn" id="downloadBtn">Download</button>
+                <button class="download-btn" id="downloadBtn"><i class="fas fa-download"></i> Download</button>
             </div>
             
             <div class="format-options">
-                <button class="format-btn active" data-format="mp3">MP3 (Audio)</button>
-                <button class="format-btn" data-format="360p">360p</button>
-                <button class="format-btn" data-format="720p">720p</button>
-                <button class="format-btn" data-format="1080p">1080p</button>
+                <button class="format-btn active" data-format="mp3"><i class="fas fa-music"></i> MP3 (Audio)</button>
+                <button class="format-btn" data-format="360p"><i class="fas fa-video"></i> 360p</button>
+                <button class="format-btn" data-format="720p"><i class="fas fa-video"></i> 720p</button>
+                <button class="format-btn" data-format="1080p"><i class="fas fa-hd-video"></i> 1080p</button>
             </div>
             
             <div class="error-message" id="errorMessage"></div>
@@ -301,7 +514,7 @@
             <div class="result-container" id="resultContainer">
                 <div class="video-info">
                     <div class="thumbnail">
-                        <img id="resultThumbnail" src="" alt="Video thumbnail" />
+                        <img id="resultThumbnail" src="" alt="Video thumbnail">
                     </div>
                     <div class="details">
                         <h2 class="title" id="resultTitle"></h2>
@@ -312,16 +525,40 @@
             </div>
             
             <div class="supported-platforms">
-                <h3>Platform yang Didukung</h3>
+                <h3><i class="fas fa-check-circle"></i> Platform yang Didukung</h3>
                 <div class="platforms-grid">
-                    <div class="platform-item"><i class="fab fa-youtube platform-icon"></i> YouTube</div>
-                    <div class="platform-item"><i class="fab fa-facebook platform-icon"></i> Facebook</div>
-                    <div class="platform-item"><i class="fab fa-instagram platform-icon"></i> Instagram</div>
-                    <div class="platform-item"><i class="fab fa-tiktok platform-icon"></i> TikTok</div>
-                    <div class="platform-item"><i class="fab fa-twitter platform-icon"></i> Twitter</div>
-                    <div class="platform-item"><i class="fab fa-soundcloud platform-icon"></i> SoundCloud</div>
-                    <div class="platform-item"><i class="fab fa-linkedin platform-icon"></i> LinkedIn</div>
-                    <div class="platform-item">Dan lainnya</div>
+                    <div class="platform-item">
+                        <i class="fab fa-youtube platform-icon youtube"></i>
+                        <span>YouTube</span>
+                    </div>
+                    <div class="platform-item">
+                        <i class="fab fa-facebook platform-icon facebook"></i>
+                        <span>Facebook</span>
+                    </div>
+                    <div class="platform-item">
+                        <i class="fab fa-instagram platform-icon instagram"></i>
+                        <span>Instagram</span>
+                    </div>
+                    <div class="platform-item">
+                        <i class="fab fa-tiktok platform-icon tiktok"></i>
+                        <span>TikTok</span>
+                    </div>
+                    <div class="platform-item">
+                        <i class="fab fa-twitter platform-icon twitter"></i>
+                        <span>Twitter</span>
+                    </div>
+                    <div class="platform-item">
+                        <i class="fab fa-soundcloud platform-icon soundcloud"></i>
+                        <span>SoundCloud</span>
+                    </div>
+                    <div class="platform-item">
+                        <i class="fab fa-linkedin platform-icon linkedin"></i>
+                        <span>LinkedIn</span>
+                    </div>
+                    <div class="platform-item">
+                        <i class="fas fa-ellipsis-h platform-icon other"></i>
+                        <span>Dan lainnya</span>
+                    </div>
                 </div>
             </div>
         </main>
@@ -330,6 +567,10 @@
             <p>Julxyzuu Downloader &copy; 2023 - Layanan download video dan audio dari berbagai platform</p>
             <p>Disclaimer: Harap patuhi syarat dan ketentuan dari platform asal konten</p>
         </footer>
+    </div>
+
+    <div class="floating-icon" id="scrollToTop">
+        <i class="fas fa-arrow-up"></i>
     </div>
 
     <script>
@@ -345,6 +586,7 @@
             const resultTitle = document.getElementById('resultTitle');
             const resultMetadata = document.getElementById('resultMetadata');
             const downloadOptions = document.getElementById('downloadOptions');
+            const scrollToTopBtn = document.getElementById('scrollToTop');
             
             let selectedFormat = 'mp3';
             
@@ -370,9 +612,133 @@
                 // Hide previous results and errors
                 resultContainer.style.display = 'none';
                 errorMessage.style.display = 'none';
-                downloadOptions.innerHTML = '';
                 
                 // Show loading
                 loadingElement.style.display = 'block';
                 
-                // Call the
+                // Call the API
+                fetchDownloadData(url);
+            });
+            
+            // Scroll to top button
+            scrollToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            
+            // Show scroll to top button when scrolling
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollToTopBtn.style.display = 'flex';
+                } else {
+                    scrollToTopBtn.style.display = 'none';
+                }
+            });
+            
+            async function fetchDownloadData(url) {
+                try {
+                    const apiUrl = `https://api.juul-web-id.xyz/downloader/aio?url=${encodeURIComponent(url)}`;
+                    const response = await fetch(apiUrl);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === true) {
+                        displayResults(data.result);
+                    } else {
+                        showError('Gagal mengunduh video. Pastikan URL benar dan coba lagi.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showError('Terjadi kesalahan saat memproses permintaan. Silakan coba lagi.');
+                } finally {
+                    loadingElement.style.display = 'none';
+                }
+            }
+            
+            function displayResults(data) {
+                resultTitle.textContent = data.title;
+                resultThumbnail.src = data.thumbnail;
+                resultThumbnail.alt = data.title;
+                
+                // Format metadata
+                let metadataHTML = '';
+                if (data.duration) {
+                    const minutes = Math.floor(data.duration / 60);
+                    const seconds = data.duration % 60;
+                    metadataHTML += `<p><i class="fas fa-clock"></i> Durasi: ${minutes}:${seconds < 10 ? '0' + seconds : seconds}</p>`;
+                }
+                if (data.author) {
+                    metadataHTML += `<p><i class="fas fa-user"></i> Channel: ${data.author}</p>`;
+                }
+                if (data.source) {
+                    metadataHTML += `<p><i class="fas fa-globe"></i> Sumber: ${data.source.charAt(0).toUpperCase() + data.source.slice(1)}</p>`;
+                }
+                
+                resultMetadata.innerHTML = metadataHTML;
+                
+                // Create download options based on available formats
+                downloadOptions.innerHTML = '';
+                
+                if (data.medias && data.medias.length > 0) {
+                    // Filter based on selected format
+                    let filteredMedias = data.medias;
+                    
+                    if (selectedFormat === 'mp3') {
+                        // Show only audio formats
+                        filteredMedias = data.medias.filter(media => media.is_audio || media.type === 'audio');
+                    } else {
+                        // Show video formats that match the selected quality
+                        filteredMedias = data.medias.filter(media => 
+                            !media.is_audio && media.quality && media.quality.toLowerCase().includes(selectedFormat)
+                        );
+                    }
+                    
+                    // If no exact match, show all video formats
+                    if (filteredMedias.length === 0 && selectedFormat !== 'mp3') {
+                        filteredMedias = data.medias.filter(media => !media.is_audio);
+                    }
+                    
+                    // Create download buttons
+                    filteredMedias.forEach(media => {
+                        const optionDiv = document.createElement('div');
+                        optionDiv.className = 'download-option';
+                        
+                        const label = document.createElement('span');
+                        label.textContent = media.quality || media.label || `${media.ext} (${media.bitrate ? Math.round(media.bitrate/1000) + 'kbps' : 'unknown quality'})`;
+                        
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = media.url;
+                        downloadLink.target = '_blank';
+                        downloadLink.rel = 'noopener noreferrer';
+                        downloadLink.className = 'download-link';
+                        downloadLink.innerHTML = `<i class="fas fa-download"></i> Download`;
+                        
+                        optionDiv.appendChild(label);
+                        optionDiv.appendChild(downloadLink);
+                        downloadOptions.appendChild(optionDiv);
+                    });
+                } else {
+                    downloadOptions.innerHTML = '<p>Tidak ada format yang tersedia untuk diunduh.</p>';
+                }
+                
+                // Show result container
+                resultContainer.style.display = 'block';
+                
+                // Scroll to results
+                resultContainer.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                
+                // Scroll to error message
+                errorMessage.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>
