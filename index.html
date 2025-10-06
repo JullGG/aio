@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Julxyzu - All-in-One Downloader</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1'
+                        },
+                        dark: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            800: '#1e293b',
+                            900: '#0f172a'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'gradient': 'gradient 8s ease infinite',
+                        'count-up': 'countUp 2s ease-out forwards'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        gradient: {
+                            '0%, 100%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'left center'
+                            },
+                            '50%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'right center'
+                            },
+                        },
+                        countUp: {
+                            '0%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.2)' },
+                            '100%': { transform: 'scale(1)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(-45deg, #0ea5e9, #8b5cf6, #ec4899, #f59e0b);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .glass-dark {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .theme-transition {
+            transition: all 0.3s ease;
+        }
+        
+        .download-count {
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+        
+        .count-animation {
+            animation: count-up 0.5s ease-out;
+        }
+        
+        .stats-card {
+            transition: all 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .media-preview-container {
+            transition: all 0.3s ease;
+        }
+        
+        .media-preview-container:hover {
+            transform: scale(1.02);
+        }
+        
+        .contact-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .contact-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            opacity: 0.1;
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            border-left: 4px solid #10b981;
+        }
+        
+        .notification.error {
+            border-left: 4px solid #ef4444;
+        }
+        
+        .pulse-effect {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-dark-900 text-gray-800 dark:text-white theme-transition">
+    <!-- Animated Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-cyan-100 dark:from-dark-900 dark:to-dark-800"></div>
+        <div class="particle floating-element" style="top: 10%; left: 5%; width: 40px; height: 40px;"></div>
+        <div class="particle floating-element" style="top: 70%; left: 90%; width: 60px; height: 60px;"></div>
+        <div class="particle floating-element" style="top: 40%; left: 80%; width: 30px; height: 30px;"></div>
+        <div class="particle floating-element" style="top: 20%; left: 70%; width: 50px; height: 50px;"></div>
+        
+        <!-- Gradient Orbs -->
+        <div class="absolute top-10 left-10 w-72 h-72 bg-blue-200 dark:bg-blue-900 rounded-full filter blur-3xl opacity-30 floating-element"></div>
+        <div class="absolute bottom-10 right-10 w-96 h-96 bg-purple-200 dark:bg-purple-900 rounded-full filter blur-3xl opacity-30 floating-element" style="animation-delay: 2s;"></div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <div class="flex items-center">
+            <i id="notificationIcon" class="fas fa-check-circle mr-3 text-green-400"></i>
+            <span id="notificationText">Download berhasil!</span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="relative z-10 py-6 px-4 md:px-8">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center shadow-lg pulse-effect">
+                        <span class="text-white font-bold text-xl">J</span>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold bg-gradient-to-r from-primary-500 to-purple-600 bg-clip-text text-transparent">Julxyzu x Aio</h1>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">All-in-One Media Downloader</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <!-- Download Counter -->
+                    <div class="hidden md:flex items-center space-x-2 px-4 py-2 bg-white dark:bg-dark-800 rounded-lg shadow">
+                        <i class="fas fa-download text-primary-500"></i>
+                        <span class="text-sm font-medium">
+                            <span class="download-count" id="downloadCount">0</span>+ Downloads
+                        </span>
+                    </div>
+                    
+                    <!-- Theme Toggle -->
+                    <button id="themeToggle" class="p-2 rounded-lg bg-white dark:bg-dark-800 shadow hover:shadow-md transition-shadow">
+                        <i class="fas fa-moon text-yellow-500 dark:hidden"></i>
+                        <i class="fas fa-sun text-yellow-400 hidden dark:block"></i>
+                    </button>
+                    
+                    <!-- Contact CS -->
+                    <a href="https://wa.me/6282229412573" target="_blank" class="contact-btn bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 shadow hover:shadow-md transition-all">
+                        <i class="fab fa-whatsapp"></i>
+                        <span class="hidden md:inline">Contact CS</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative z-10 py-12 md:py-20 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">
+                    Download <span class="bg-gradient-to-r from-primary-500 to-purple-600 bg-clip-text text-transparent">Media</span> 
+                    <br>Dari Semua Platform
+                </h1>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-8">
+                    Download video, audio, dan gambar dari YouTube, Instagram, TikTok, Facebook, dan 50+ platform lainnya dengan kualitas terbaik.
+                </p>
+                
+                <!-- Platform Icons -->
+                <div class="flex flex-wrap justify-center gap-4 mb-12">
+                    <div class="platform-icon bg-red-500 text-white p-3 rounded-xl shadow">
+                        <i class="fab fa-youtube text-2xl"></i>
+                    </div>
+                    <div class="platform-icon bg-pink-500 text-white p-3 rounded-xl shadow">
+                        <i class="fab fa-instagram text-2xl"></i>
+                    </div>
+                    <div class="platform-icon bg-blue-600 text-white p-3 rounded-xl shadow">
+                        <i class="fab fa-facebook text-2xl"></i>
+                    </div>
+                    <div class="platform-icon bg-black text-white p-3 rounded-xl shadow">
+                        <i class="fab fa-tiktok text-2xl"></i>
+                    </div>
+                    <div class="platform-icon bg-red-700 text-white p-3 rounded-xl shadow">
+                        <i class="fab fa-pinterest text-2xl"></i>
+                    </div>
+                    <div class="platform-icon bg-green-500 text-white p-3 rounded-xl shadow">
+                        <i class="fab fa-spotify text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Download Input Section -->
+            <div class="glass dark:glass-dark rounded-2xl p-6 md:p-8 max-w-4xl mx-auto shadow-2xl border border-gray-200 dark:border-gray-700">
+                <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">Tempelkan URL Media Anda</h2>
+                
+                <div class="mb-6">
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="urlInput" 
+                            placeholder="https://www.youtube.com/watch?v=..." 
+                            class="w-full bg-white dark:bg-dark-800 border border-gray-300 dark:border-gray-600 rounded-xl py-4 px-6 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all shadow-sm"
+                        >
+                        <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                            <i class="fas fa-link text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col md:flex-row justify-between items-center gap-6 mb-6">
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex items-center">
+                            <input type="radio" id="mp4" name="format" value="mp4" class="mr-3 h-5 w-5 text-primary-500 focus:ring-primary-500" checked>
+                            <label for="mp4" class="text-lg font-medium text-gray-700 dark:text-gray-300">MP4 (Video)</label>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <input type="radio" id="mp3" name="format" value="mp3" class="mr-3 h-5 w-5 text-primary-500 focus:ring-primary-500">
+                            <label for="mp3" class="text-lg font-medium text-gray-700 dark:text-gray-300">MP3 (Audio)</label>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <input type="radio" id="image" name="format" value="image" class="mr-3 h-5 w-5 text-primary-500 focus:ring-primary-500">
+                            <label for="image" class="text-lg font-medium text-gray-700 dark:text-gray-300">Gambar</label>
+                        </div>
+                    </div>
+                    
+                    <button 
+                        id="previewBtn" 
+                        class="bg-gradient-to-r from-primary-500 to-purple-600 hover:from-primary-600 hover:to-purple-700 text-white px-8 py-4 rounded-xl text-lg font-semibold flex items-center space-x-2 w-full md:w-auto justify-center transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                    >
+                        <i class="fas fa-bolt"></i>
+                        <span>Preview & Download</span>
+                    </button>
+                </div>
+                
+                <div class="text-center">
+                    <p class="text-gray-600 dark:text-gray-400">Mendukung 50+ platform termasuk YouTube, Instagram, TikTok, Facebook, Pinterest, dan lainnya</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="resultsSection" class="relative z-10 py-12 px-4 hidden">
+        <div class="container mx-auto max-w-4xl">
+            <div class="glass dark:glass-dark rounded-2xl p-6 md:p-8 shadow-2xl border border-gray-200 dark:border-gray-700">
+                <h2 class="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-primary-500 to-purple-600 bg-clip-text text-transparent">Preview Media</h2>
+                
+                <!-- Media Info - Diperbesar -->
+                <div id="mediaInfo" class="mb-8">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+                
+                <!-- Preview - Diperbesar -->
+                <div id="previewContainer" class="mb-8">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+                
+                <!-- Quality Options -->
+                <div id="qualityOptions" class="mb-8">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Pilih Kualitas/Resolusi:</h3>
+                    <div id="qualityList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Download Button -->
+                <div class="text-center">
+                    <button 
+                        id="downloadBtn" 
+                        class="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-10 py-4 rounded-xl text-xl font-semibold flex items-center space-x-3 mx-auto hidden transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                    >
+                        <i class="fas fa-download"></i>
+                        <span>Download Sekarang</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="relative z-10 py-16 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Statistik Penggunaan</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">Bergabung dengan jutaan pengguna yang telah mempercayai JJulxyzu Downloader</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="stats-card bg-white dark:bg-dark-800 rounded-2xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <div class="text-4xl text-primary-500 mb-4">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2"><span class="download-count" id="totalDownloads">0</span></h3>
+                    <p class="text-gray-600 dark:text-gray-400">Total Download</p>
+                </div>
+                
+                <div class="stats-card bg-white dark:bg-dark-800 rounded-2xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <div class="text-4xl text-purple-500 mb-4">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2"><span class="download-count" id="activeUsers">0</span></h3>
+                    <p class="text-gray-600 dark:text-gray-400">Pengguna Aktif</p>
+                </div>
+                
+                <div class="stats-card bg-white dark:bg-dark-800 rounded-2xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+                    <div class="text-4xl text-green-500 mb-4">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2"><span class="download-count">99.9%</span></h3>
+                    <p class="text-gray-600 dark:text-gray-400">Success Rate</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="relative z-10 py-12 px-4 bg-gray-50 dark:bg-dark-800 mt-16">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold">J</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">Julxyzu Aio Downloader</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">All-in-One Media Downloader</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex space-x-6 mb-6 md:mb-0">
+                    <a href="#" class="text-gray-400 hover:text-primary-500 transition-colors">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-primary-500 transition-colors">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="https://wa.me/6282229412573" target="_blank" class="text-gray-400 hover:text-green-500 transition-colors">
+                        <i class="fab fa-whatsapp text-xl"></i>
+                    </a>
+                </div>
+                
+                <div class="text-center md:text-right">
+                    <p class="text-gray-600 dark:text-gray-400">Butuh bantuan?</p>
+                    <a href="https://wa.me/6282229412573" target="_blank" class="text-primary-500 hover:text-primary-600 font-semibold">Hubungi Customer Service</a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 dark:border-gray-700 mt-8 pt-8 text-center text-gray-500 dark:text-gray-400">
+                <p>&copy; 2025 Julxyzu. Created with ❤️ by Jul & RenvyTeam</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize download counter from localStorage
+            let downloadCount = parseInt(localStorage.getItem('downloadCount')) || 0;
+            let activeUsers = parseInt(localStorage.getItem('activeUsers')) || 1247;
+            
+            // Update counter displays
+            function updateCounters() {
+                const downloadCountElement = document.getElementById('downloadCount');
+                const totalDownloadsElement = document.getElementById('totalDownloads');
+                const activeUsersElement = document.getElementById('activeUsers');
+                
+                // Format numbers with commas
+                const formatNumber = (num) => {
+                    if (num >= 1000000) {
+                        return (num / 1000000).toFixed(1) + 'Jt';
+                    } else if (num >= 1000) {
+                        return (num / 1000).toFixed(1) + 'Rb';
+                    }
+                    return num.toString();
+                };
+                
+                downloadCountElement.textContent = formatNumber(downloadCount);
+                totalDownloadsElement.textContent = formatNumber(downloadCount);
+                activeUsersElement.textContent = formatNumber(activeUsers);
+                
+                // Add animation class
+                downloadCountElement.classList.add('count-animation');
+                totalDownloadsElement.classList.add('count-animation');
+                
+                // Remove animation class after animation completes
+                setTimeout(() => {
+                    downloadCountElement.classList.remove('count-animation');
+                    totalDownloadsElement.classList.remove('count-animation');
+                }, 500);
+            }
+            
+            // Increment download counter
+            function incrementDownloadCount() {
+                downloadCount++;
+                localStorage.setItem('downloadCount', downloadCount);
+                updateCounters();
+                
+                // Simulate active user growth (every 10 downloads adds 1 active user)
+                if (downloadCount % 10 === 0) {
+                    activeUsers++;
+                    localStorage.setItem('activeUsers', activeUsers);
+                }
+            }
+            
+            // Initialize counters
+            updateCounters();
+            
+            const urlInput = document.getElementById('urlInput');
+            const previewBtn = document.getElementById('previewBtn');
+            const resultsSection = document.getElementById('resultsSection');
+            const mediaInfo = document.getElementById('mediaInfo');
+            const previewContainer = document.getElementById('previewContainer');
+            const qualityList = document.getElementById('qualityList');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const themeToggle = document.getElementById('themeToggle');
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            const notificationIcon = document.getElementById('notificationIcon');
+            
+            let currentMediaData = null;
+            let selectedFormat = 'mp4';
+            
+            // Theme Toggle
+            themeToggle.addEventListener('click', function() {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+            
+            // Check saved theme
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+            
+            // Show notification
+            function showNotification(message, isError = false) {
+                notificationText.textContent = message;
+                notification.className = 'notification';
+                
+                if (isError) {
+                    notification.classList.add('error');
+                    notificationIcon.className = 'fas fa-exclamation-circle mr-3 text-red-400';
+                } else {
+                    notification.classList.add('success');
+                    notificationIcon.className = 'fas fa-check-circle mr-3 text-green-400';
+                }
+                
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 4000);
+            }
+            
+            // Format radio button change
+            document.querySelectorAll('input[name="format"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    selectedFormat = this.value;
+                });
+            });
+            
+            // Preview button click
+            previewBtn.addEventListener('click', function() {
+                const url = urlInput.value.trim();
+                
+                if (!url) {
+                    showNotification('Masukkan URL terlebih dahulu!', true);
+                    return;
+                }
+                
+                // Button loading animation
+                const originalText = previewBtn.innerHTML;
+                previewBtn.innerHTML = '<div class="flex items-center space-x-2"><div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div><span>Loading...</span></div>';
+                previewBtn.disabled = true;
+                
+                // Fetch data from API
+                fetch(`https://api.juul-web-id.xyz/downloader/aio?url=${encodeURIComponent(url)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Reset button
+                        previewBtn.innerHTML = originalText;
+                        previewBtn.disabled = false;
+                        
+                        if (data.status && data.result.status) {
+                            currentMediaData = data.result.result;
+                            displayMediaInfo(currentMediaData);
+                            displayPreview(currentMediaData);
+                            displayQualityOptions(currentMediaData);
+                            resultsSection.classList.remove('hidden');
+                            
+                            // Scroll to results
+                            resultsSection.scrollIntoView({ behavior: 'smooth' });
+                            
+                            showNotification('Media berhasil dimuat!');
+                        } else {
+                            showNotification('Gagal mengambil data. Pastikan URL valid!', true);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        previewBtn.innerHTML = originalText;
+                        previewBtn.disabled = false;
+                        showNotification('Terjadi kesalahan. Coba lagi!', true);
+                    });
+            });
+            
+            // Display media info - DIPERBESAR
+            function displayMediaInfo(data) {
+                mediaInfo.innerHTML = `
+                    <div class="bg-white dark:bg-dark-800 rounded-2xl p-6 flex flex-col md:flex-row items-start gap-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                        <img src="${data.thumbnail}" alt="Thumbnail" class="w-48 h-32 md:w-64 md:h-40 object-cover rounded-xl shadow-md media-preview-container">
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-bold mb-3 text-gray-800 dark:text-white">${data.title}</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-600 dark:text-gray-300">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-globe text-primary-500"></i>
+                                    <span>Sumber: <strong class="text-gray-800 dark:text-white capitalize">${data.source}</strong></span>
+                                </div>
+                                ${data.duration ? `
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-clock text-primary-500"></i>
+                                    <span>Durasi: <strong class="text-gray-800 dark:text-white">${formatDuration(data.duration)}</strong></span>
+                                </div>
+                                ` : ''}
+                                ${data.author ? `
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-user text-primary-500"></i>
+                                    <span>Pembuat: <strong class="text-gray-800 dark:text-white">${data.author}</strong></span>
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Display preview - DIPERBESAR
+            function displayPreview(data) {
+                previewContainer.innerHTML = '';
+                
+                if (selectedFormat === 'mp3') {
+                    const audioMedia = data.medias.find(media => media.type === 'audio');
+                    if (audioMedia) {
+                        previewContainer.innerHTML = `
+                            <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Preview Audio:</h3>
+                            <div class="bg-white dark:bg-dark-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                                <audio controls class="w-full h-16">
+                                    <source src="${audioMedia.url}" type="audio/mpeg">
+                                    Browser tidak mendukung pemutar audio.
+                                </audio>
+                            </div>
+                        `;
+                    }
+                } else if (selectedFormat === 'mp4') {
+                    const videoMedia = data.medias.find(media => media.type === 'video');
+                    if (videoMedia) {
+                        previewContainer.innerHTML = `
+                            <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Preview Video:</h3>
+                            <div class="bg-white dark:bg-dark-800 rounded-2xl p-4 shadow-lg border border-gray-200 dark:border-gray-700 media-preview-container">
+                                <video controls class="w-full h-64 md:h-96 rounded-lg">
+                                    <source src="${videoMedia.url}" type="video/mp4">
+                                    Browser tidak mendukung pemutar video.
+                                </video>
+                            </div>
+                        `;
+                    }
+                } else if (selectedFormat === 'image') {
+                    previewContainer.innerHTML = `
+                        <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Preview Gambar:</h3>
+                        <div class="bg-white dark:bg-dark-800 rounded-2xl p-4 shadow-lg border border-gray-200 dark:border-gray-700 flex justify-center media-preview-container">
+                            <img src="${data.thumbnail}" alt="Preview" class="max-w-full h-auto rounded-lg max-h-96">
+                        </div>
+                    `;
+                }
+            }
+            
+            // Display quality options
+            function displayQualityOptions(data) {
+                qualityList.innerHTML = '';
+                
+                let filteredMedias = [];
+                
+                if (selectedFormat === 'mp3') {
+                    filteredMedias = data.medias.filter(media => media.type === 'audio');
+                } else if (selectedFormat === 'image') {
+                    filteredMedias = data.medias.filter(media => 
+                        media.type === 'image' || media.ext === 'jpg' || media.ext === 'png' || media.ext === 'webp'
+                    );
+                } else {
+                    filteredMedias = data.medias.filter(media => media.type === 'video');
+                }
+                
+                if (filteredMedias.length === 0) {
+                    qualityList.innerHTML = `
+                        <div class="col-span-2 bg-white dark:bg-dark-800 rounded-xl p-6 text-center shadow border border-gray-200 dark:border-gray-700">
+                            <i class="fas fa-exclamation-circle text-3xl text-gray-400 mb-3"></i>
+                            <p class="font-bold text-gray-600 dark:text-gray-400">Tidak ada format tersedia untuk pilihan ini.</p>
+                        </div>
+                    `;
+                    downloadBtn.classList.add('hidden');
+                    return;
+                }
+                
+                filteredMedias.forEach((media, index) => {
+                    const qualityItem = document.createElement('div');
+                    qualityItem.className = 'bg-white dark:bg-dark-800 rounded-xl p-4 shadow border border-gray-200 dark:border-gray-700 hover:border-primary-500 transition-all cursor-pointer quality-option';
+                    
+                    let qualityText = media.quality || media.label || `${media.ext}`;
+                    if (media.width && media.height) {
+                        qualityText += ` (${media.width}x${media.height})`;
+                    }
+                    
+                    qualityItem.innerHTML = `
+                        <div class="flex items-center">
+                            <input type="radio" id="quality-${index}" name="quality" value="${index}" class="mr-4 h-5 w-5 text-primary-500 focus:ring-primary-500" ${index === 0 ? 'checked' : ''}>
+                            <label for="quality-${index}" class="flex-grow cursor-pointer">
+                                <span class="font-bold block text-gray-800 dark:text-white">${qualityText}</span>
+                                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                    ${media.data_size ? `<span>${formatFileSize(media.data_size)}</span>` : ''}
+                                    ${media.bitrate ? `<span>${formatBitrate(media.bitrate)}</span>` : ''}
+                                </div>
+                            </label>
+                        </div>
+                    `;
+                    
+                    qualityItem.addEventListener('click', function() {
+                        document.querySelectorAll('.quality-option').forEach(item => {
+                            item.classList.remove('border-primary-500', 'bg-primary-50', 'dark:bg-primary-900/20');
+                        });
+                        this.classList.add('border-primary-500', 'bg-primary-50', 'dark:bg-primary-900/20');
+                        const radio = this.querySelector('input[type="radio"]');
+                        radio.checked = true;
+                    });
+                    
+                    if (index === 0) qualityItem.classList.add('border-primary-500', 'bg-primary-50', 'dark:bg-primary-900/20');
+                    
+                    qualityList.appendChild(qualityItem);
+                });
+                
+                downloadBtn.classList.remove('hidden');
+            }
+            
+            // Download button click
+            downloadBtn.addEventListener('click', function() {
+                if (!currentMediaData) return;
+                
+                const selectedQuality = document.querySelector('input[name="quality"]:checked');
+                if (!selectedQuality) {
+                    showNotification('Pilih kualitas terlebih dahulu!', true);
+                    return;
+                }
+                
+                let filteredMedias = [];
+                
+                if (selectedFormat === 'mp3') {
+                    filteredMedias = currentMediaData.medias.filter(media => media.type === 'audio');
+                } else if (selectedFormat === 'image') {
+                    filteredMedias = currentMediaData.medias.filter(media => 
+                        media.type === 'image' || media.ext === 'jpg' || media.ext === 'png' || media.ext === 'webp'
+                    );
+                } else {
+                    filteredMedias = currentMediaData.medias.filter(media => media.type === 'video');
+                }
+                
+                const mediaIndex = parseInt(selectedQuality.value);
+                const selectedMedia = filteredMedias[mediaIndex];
+                
+                if (selectedMedia && selectedMedia.url) {
+                    // Create download link
+                    const a = document.createElement('a');
+                    a.href = selectedMedia.url;
+                    a.download = `${currentMediaData.title}.${selectedMedia.ext}`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    
+                    // Increment download counter
+                    incrementDownloadCount();
+                    
+                    // Button animation
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                    
+                    showNotification('Download berhasil dimulai!');
+                } else {
+                    showNotification('URL download tidak valid!', true);
+                }
+            });
+            
+            // Helper function to format duration
+            function formatDuration(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+            
+            // Helper function to format bitrate
+            function formatBitrate(bitrate) {
+                if (bitrate >= 1000000) {
+                    return (bitrate / 1000000).toFixed(1) + ' Mbps';
+                } else if (bitrate >= 1000) {
+                    return (bitrate / 1000).toFixed(1) + ' kbps';
+                } else {
+                    return bitrate + ' bps';
+                }
+            }
+            
+            // Helper function to format file size
+            function formatFileSize(bytes) {
+                if (bytes >= 1000000) {
+                    return (bytes / 1000000).toFixed(1) + ' MB';
+                } else if (bytes >= 1000) {
+                    return (bytes / 1000).toFixed(1) + ' KB';
+                } else {
+                    return bytes + ' B';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
